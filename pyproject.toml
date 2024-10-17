@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "kanjiconv"
+version = "0.1.0"
+description = "Kanji Converter to Hiragana, Katakana, Romaji"
+authors = ["sea-turt1e <h.yamada.bg@gmail.com>"]
+license = "Apache License Version 2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+sudachipy = ">=0.6.8"
+sudachidict-full = "^20240716"
+sudachidict-core = "^20240716"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest-watch = "^4.2.0"
+pytest-mock = "^3.14.0"
+pytest-cov = "^5.0.0"
+ipdb = "^0.13.13"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
