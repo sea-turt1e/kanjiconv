@@ -1,6 +1,6 @@
 # kanjiconv
-Japanese REAMED is here.  
-https://github.com/morikatron/kanjiconv/blob/main/README_ja.md
+Japanese REAMED is here.  （日本語のREADMEはこちらです。）
+https://github.com/sea_turt1e/kanjiconv/blob/main/README_ja.md
 
 Kanji Converter to Hiragana, Katakana, Latin alphabet.  
 
@@ -30,54 +30,48 @@ pip install sudachidict_core
 ```
 
 ## How to use
-### Import
+### Import & Create Instance
 ```python
->>> from kanjiconv import kanjiconv
-```
-
-### Parse Sentence
-```python
->>> sentence = "幽☆遊☆白書は最高の漫画です"
->>> parsed_list = kanjiconv.get_parsed_list(sentence)
+>>> from kanjiconv import KanjiConv
+>>> kanji_conv = KanjiConv(separator="/")
 ```
 
 ### Get Reading
 ```python
 # convert to hiragana
->>> hiragana_sentence = kanjiconv.get_hiragana_sentence(parsed_list)
->>> print(hiragana_sentence)
-ゆうゆうはくしょはさいこうのまんがです
+>>> text = "幽☆遊☆白書は、最高の漫画デス。"
+>>> print(kanji_conv.to_hiragana(text))
+ゆうゆうはくしょ/は/、/さいこう/の/まんが/です/。
 
 # convert to katakana
->>> katakana_sentence = kanjiconv.get_katakana_sentence(parsed_list)
->>> print(katakana_sentence)
-ユウユウハクショハサイコウノマンガデス
+>>> text = "幽☆遊☆白書は、最高の漫画デス。"
+>>> print(kanji_conv.to_katakana(text))
+ユウユウハクショ/ハ/、/サイコウ/ノ/マンガ/デス/。
 
 # convert to Latin alphabet
->>> roma_sentence = kanjiconv.get_roma_sentence(parsed_list)
->>> print(roma_sentence)
-yuuyuuhakushohasaikounomangadesu
+>>> text = "幽☆遊☆白書は、最高の漫画デス。"
+>>> print(kanji_conv.to_roman(text))
+yuuyuuhakusho/ha/, /saikou/no/manga/desu/. 
+
+# You can change separator to another character or None
+>>> kanji_conv = KanjiConv(separator="_")
+>>> print(kanji_conv.to_hiragana(text))
+ゆうゆうはくしょ_は_、_さいこう_の_まんが_です_。
+
+>>> kanji_conv = KanjiConv(separator="")
+>>> print(kanji_conv.to_hiragana(text))
+ゆうゆうはくしょは、さいこうのまんがです。
 ```
 
-### Get Pronunciation
-```python
-# convert to hiragana
->>> hiragana_sentence = kanjiconv.get_hiragana_sentence(parsed_list, is_hatsuon=True)
->>> print(hiragana_sentence)
-ゆーゆーはくしょわさいこーのまんがです
-
-# convert to katakana
->>> katakana_sentence = kanjiconv.get_katakana_sentence(parsed_list, is_hatsuon=True)
->>> print(katakana_sentence)
-ユーユーハクショワサイコーノマンガデス
-
-# convert to Latin alphabet
->>> roma_sentence = kanjiconv.get_roma_sentence(parsed_list, is_hatsuon=True)
->>> print(roma_sentence)
-yuｰyuｰhakushowasaikoｰnomangadesu
+## Update Dict
+kanjiconv reading function is based on SudachiDict, and you need to update SudachiDict regularly via pip.
+```bash
+pip install -U sudachidict_full
+pip install -U sudachidict_small
+pip install -U sudachidict_core
 ```
-
 
 ## Licenses
 - [kanjiconv](https://github.com/morikatron/kanjiconv/blob/main/LICENSE): Apache License 2.0
-- [SudachiPy]
+- [SudachiPy](https://github.com/WorksApplications/SudachiPy/blob/develop/LICENSE): Apache License 2.0
+- [SudachiDict](https://github.com/WorksApplications/SudachiDict/blob/develop/LICENSE-2.0.txt):  Apache License 2.0

@@ -69,7 +69,6 @@ class KanjiConv:
             else:
                 roman_text += char
             i += 1
-        print(f"roman_text: {roman_text}")
         return roman_text
 
 
