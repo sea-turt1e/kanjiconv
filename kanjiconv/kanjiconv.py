@@ -1,28 +1,34 @@
 import json
 import os
 
-import ipdb
 import sudachipy
-from entities import SudachiDictType
+
+from kanjiconv.entities import SudachiDictType
 
 
 def parse_text(func):
     def wrapper(self, text):
         tokens = self.tokenizer.tokenize(text)
-        readings = "".join([token.reading_form() for token in tokens])
+        readings = self.separator.join([token.reading_form() for token in tokens])
         return func(self, readings)
 
     return wrapper
 
 
 class KanjiConv:
-    def __init__(self, sudachi_dict_type: SudachiDictType = SudachiDictType.FULL, data_path="data/kana.json"):
+    def __init__(
+        self,
+        sudachi_dict_type: SudachiDictType = SudachiDictType.FULL,
+        data_path="kanjiconv/data/kana.json",
+        separator: str = " ",
+    ):
         assert os.path.isfile(data_path), "File does not exist"
         with open(data_path, "r") as f:
             self.kana = json.load(f)
             assert isinstance(self.kana, dict), "JSON must be a dictionary"
         sudachi_dict = sudachipy.Dictionary(dict=sudachi_dict_type.value)
         self.tokenizer = sudachi_dict.create()
+        self.separator = separator
 
     @parse_text
     def to_hiragana(self, text: str) -> str:
@@ -50,23 +56,26 @@ class KanjiConv:
                 and text[i + 1] in self.kana["small_katakana"]
             ):
                 combined = text[i] + text[i + 1]
-                if combined in self.kana["katakana"]:
-                    roman_text += self.kana["katakana"][combined]
+                if combined in self.kana["katakana2roman"]:
+                    roman_text += self.kana["katakana2roman"][combined]
                     i += 2  # 拗音の場合は2文字を消費
                     continue
 
             # 通常のカタカナの処理
             char = text[i]
-            if "ァ" <= char <= "ン":
-                roman_text += self.kana["katakana"].get(char, "")
-            i += 1
 
+            if "ァ" <= char <= "ン" or "、" <= char <= "ー":
+                roman_text += self.kana["katakana2roman"].get(char, "")
+            else:
+                roman_text += char
+            i += 1
+        print(f"roman_text: {roman_text}")
         return roman_text
 
 
 if __name__ == "__main__":
-    kanji_conv = KanjiConv()
-    text = "幽☆遊☆白書は最高の漫画ﾃﾞｽ"
+    kanji_conv = KanjiConv(separator="/")
+    text = "幽☆遊☆白書は、最高の漫画デス。"
     print(kanji_conv.to_hiragana(text))
     print(kanji_conv.to_katakana(text))
     print(kanji_conv.to_roman(text))
