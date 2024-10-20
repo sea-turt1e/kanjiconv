@@ -1,9 +1,8 @@
 # kanjiconv
-Japanese REAMED is here.  （日本語のREADMEはこちらです。）
-https://github.com/sea_turt1e/kanjiconv/blob/main/README_ja.md
+Japanese REAMED is here.  （日本語のREADMEはこちらです。）  
+https://github.com/sea-turt1e/kanjiconv/blob/main/README_ja.md
 
 Kanji Converter to Hiragana, Katakana, Latin alphabet.  
-
 You can get the reading and pronunciation of Japanese sentences based on sudachidict.  
 
 ## Test Environments
