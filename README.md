@@ -5,7 +5,7 @@ https://github.com/sea-turt1e/kanjiconv/blob/main/README_ja.md
 Kanji Converter to Hiragana, Katakana, Latin alphabet.  
 You can get the reading and pronunciation of Japanese sentences based on sudachidict.  
 
-## Test Environments
+## Environments
 ```
 macOS Sonoma 14.5
 python==3.11.7

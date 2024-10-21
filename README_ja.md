@@ -5,7 +5,7 @@ https://github.com/sea-turt1e/kanjiconv/blob/main/README.md
 漢字をひらがな、カタカナ、ローマ字に変換するツールです。  
 sudachidictをベースに、日本語の文の読みや発音を取得することができます。
 
-## テスト環境
+## 環境
 ```
 macOS Sonoma 14.5
 python==3.11.7
