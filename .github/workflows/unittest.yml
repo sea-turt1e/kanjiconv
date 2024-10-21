@@ -6,6 +6,10 @@ on:
       - main
       - develop
   workflow_dispatch: 
+  push:
+    branches:
+      - main
+      - develop
 
 jobs:
   test:
