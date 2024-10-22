@@ -1,0 +1,55 @@
+name: Deploy to PyPI
+
+on:
+  pull_request:
+    branches:
+      - deploy
+    types:
+      - closed
+  push:
+    branches:
+      - deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'  # 使用するPythonのバージョン
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "export PATH=$HOME/.local/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: Publish package to PyPI
+        run: |
+          poetry publish --build
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}  # PyPIの認証トークン
+
+  tag:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' # 'main'ブランチにマージされた場合
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create Tag
+        run: |
+          TAG_NAME=$(date +%Y%m%d%H%M%S)
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
