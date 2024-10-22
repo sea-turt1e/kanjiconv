@@ -70,7 +70,18 @@ pip install -U sudachidict_small
 pip install -U sudachidict_core
 ```
 
-## Licenses
-- [kanjiconv](https://github.com/morikatron/kanjiconv/blob/main/LICENSE): Apache License 2.0
-- [SudachiPy](https://github.com/WorksApplications/SudachiPy/blob/develop/LICENSE): Apache License 2.0
-- [SudachiDict](https://github.com/WorksApplications/SudachiDict/blob/develop/LICENSE-2.0.txt):  Apache License 2.0
+## License
+
+This project is licensed under the [Apache License 2.0](LICENSE).
+
+### Open Source Software Used
+
+- [SudachiPy](https://github.com/WorksApplications/SudachiPy): Apache License 2.0
+- [SudachiDict](https://github.com/WorksApplications/SudachiDict): Apache License 2.0
+
+This library uses SudachiPy and its dictionary SudachiDict for morphological analysis. These are also distributed under the Apache License 2.0.
+
+For detailed license information, please refer to the LICENSE files of each project:
+
+- [SudachiPy LICENSE](https://github.com/WorksApplications/SudachiPy/blob/develop/LICENSE)
+- [SudachiDict LICENSE](https://github.com/WorksApplications/SudachiDict/blob/develop/LICENSE-2.0.txt)

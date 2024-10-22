@@ -70,7 +70,19 @@ pip install -U sudachidict_small
 pip install -U sudachidict_core
 ```
 
-## Licenses
-- [kanjiconv](https://github.com/morikatron/kanjiconv/blob/main/LICENSE): Apache License 2.0
-- [SudachiPy](https://github.com/WorksApplications/SudachiPy/blob/develop/LICENSE): Apache License 2.0
-- [SudachiDict](https://github.com/WorksApplications/SudachiDict/blob/develop/LICENSE-2.0.txt):  Apache License 2.0
+## ライセンス
+## ライセンス
+
+本プロジェクトは[Apache License 2.0](LICENSE)の下でライセンスされています。
+
+### 使用しているオープンソースソフトウェア
+
+- [SudachiPy](https://github.com/WorksApplications/SudachiPy): Apache License 2.0
+- [SudachiDict](https://github.com/WorksApplications/SudachiDict): Apache License 2.0
+
+本ライブラリは形態素解析にSudachiPyとその辞書であるSudachiDictを使用しています。これらもApache License 2.0の下で配布されています。
+
+詳細なライセンス情報については、各プロジェクトのLICENSEファイルをご確認ください。
+
+- [SudachiPyのLICENSE](https://github.com/WorksApplications/SudachiPy/blob/develop/LICENSE)
+- [SudachiDictのLICENSE](https://github.com/WorksApplications/SudachiDict/blob/develop/LICENSE-2.0.txt)
