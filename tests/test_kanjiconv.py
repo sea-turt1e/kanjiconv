@@ -29,7 +29,7 @@ def test_to_hiragana(mock_dictionary, mock_isfile):
         MockToken("デス"),
         MockToken("。"),
     ]
-    kanji_conv = KanjiConv(sudachi_dict_type=SudachiDictType.FULL, separator="/")
+    kanji_conv = KanjiConv(sudachi_dict_type=SudachiDictType.FULL.value, separator="/")
     result = kanji_conv.to_hiragana("幽☆遊☆白書は、最高の漫画ﾃﾞｽ。")
     assert result == "ゆうゆうはくしょ/は/、/さいこう/の/まんが/です/。"
 
@@ -50,7 +50,7 @@ def test_to_katakana(mock_dictionary, mock_isfile):
         MockToken("。"),
     ]
 
-    kanji_conv = KanjiConv(sudachi_dict_type=SudachiDictType.FULL, separator="/")
+    kanji_conv = KanjiConv(sudachi_dict_type=SudachiDictType.FULL.value, separator="/")
     result = kanji_conv.to_katakana("幽☆遊☆白書は、最高の漫画ﾃﾞｽ。")
     assert result == "ユウユウハクショ/ハ/、/サイコウ/ノ/マンガ/デス/。"
 
@@ -71,7 +71,7 @@ def test_to_roman(mock_dictionary, mock_isfile):
         MockToken("。"),
     ]
 
-    kanji_conv = KanjiConv(sudachi_dict_type=SudachiDictType.FULL, separator="/")
+    kanji_conv = KanjiConv(sudachi_dict_type=SudachiDictType.FULL.value, separator="/")
     result = kanji_conv.to_roman("幽☆遊☆白書は、最高の漫画ﾃﾞｽ。")
     assert result == "yuuyuuhakusho/ha/, /saikou/no/manga/desu/. "
 

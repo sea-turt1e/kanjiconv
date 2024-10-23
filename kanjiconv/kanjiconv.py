@@ -34,7 +34,7 @@ class KanjiConv:
 
     def __init__(
         self,
-        sudachi_dict_type: SudachiDictType = SudachiDictType.FULL,
+        sudachi_dict_type: SudachiDictType = SudachiDictType.FULL.value,
         separator: str = " ",
     ) -> None:
         """
@@ -51,7 +51,7 @@ class KanjiConv:
             self.kana = json.load(f)
 
         # Initialize Sudachi tokenizer
-        sudachi_dict = sudachipy.Dictionary(dict=sudachi_dict_type.value)
+        sudachi_dict = sudachipy.Dictionary(dict=sudachi_dict_type)
         self.tokenizer = sudachi_dict.create()
         self.separator = separator
 
