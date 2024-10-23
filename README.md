@@ -2,8 +2,9 @@
 Japanese REAMED is here.  （日本語のREADMEはこちらです。）  
 https://github.com/sea-turt1e/kanjiconv/blob/main/README_ja.md
 
-Kanji Converter to Hiragana, Katakana, Latin alphabet.  
+Kanji Converter to Hiragana, Katakana, Roman alphabet.  
 You can get the reading and pronunciation of Japanese sentences based on sudachidict.  
+Sudachidict is a regularly updated dictionary, so it can relatively handle new proper nouns and other terms.
 
 ## Environments
 ```
@@ -15,17 +16,6 @@ python==3.11.7
 ### Install kanjiconv
 ```bash
 pip install kanjiconv
-```
-
-### Install sudachidict
-You can install either sudachidict_full(recomend), sudachidict_core, sudachidict_small.
-- If you want detailed readings, I recommend using sudachidict_full.
-- If you prioritize lighter operation, then sudachidict_small is the way to go.
-- sudachidict_core offers a balance between the operation speed and accuracy of sudachidict_full and sudachidict_small.
-```bash
-pip install sudachidict_full
-pip install sudachidict_small
-pip install sudachidict_core
 ```
 
 ## How to use
@@ -47,7 +37,7 @@ pip install sudachidict_core
 >>> print(kanji_conv.to_katakana(text))
 ユウユウハクショ/ハ/、/サイコウ/ノ/マンガ/デス/。
 
-# convert to Latin alphabet
+# convert to Roman alphabet
 >>> text = "幽☆遊☆白書は、最高の漫画デス。"
 >>> print(kanji_conv.to_roman(text))
 yuuyuuhakusho/ha/, /saikou/no/manga/desu/. 
@@ -60,6 +50,21 @@ yuuyuuhakusho/ha/, /saikou/no/manga/desu/.
 >>> kanji_conv = KanjiConv(separator="")
 >>> print(kanji_conv.to_hiragana(text))
 ゆうゆうはくしょは、さいこうのまんがです。
+```
+
+## (Optional) Installing sudachidict other than the default
+The default dictionary is sudachidict_full. If you want to use a lighter dictionary, you can install either sudachidict_small or sudachidict_core.
+- If you need detailed readings, we recommend using sudachidict_full. The default is set to sudachidict_full.
+- If you prefer lighter operation, sudachidict_small is recommended.
+- sudachidict_core offers a balanced option between speed and accuracy.
+```bash
+pip install sudachidict_small
+pip install sudachidict_core
+```
+- If using sudachidict_small or sudachidict_core, specify it like this:
+```python
+>>> kanji_conv = KanjiConv(sudachi_dict_type="small", separator="/")
+>>> kanji_conv = KanjiConv(sudachi_dict_type="core", separator="/")
 ```
 
 ## Update Dict

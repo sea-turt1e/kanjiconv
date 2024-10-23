@@ -3,7 +3,8 @@ English README is here. （英語のREADMEはこちらです。）
 https://github.com/sea-turt1e/kanjiconv/blob/main/README.md
 
 漢字をひらがな、カタカナ、ローマ字に変換するツールです。  
-sudachidictをベースに、日本語の文の読みや発音を取得することができます。
+sudachidictをベースに、日本語の文の読みや発音を取得することができます。  
+sudachidictは定期的に更新される辞書なので、新しい固有名詞等にも比較的対応できます。
 
 ## 環境
 ```
@@ -17,17 +18,6 @@ python==3.11.7
 pip install kanjiconv
 ```
 
-### sudachidictのインストール
-sudachidict_full（推奨）、sudachidict_core、sudachidict_smallのいずれかをインストールできます。
-- 詳細な読みが必要な場合は、sudachidict_fullの使用をお勧めします。
-- 軽量な動作を優先する場合は、sudachidict_smallがお勧めです。
-- sudachidict_coreは、動作速度と精度のバランスを取った選択肢です。
-```bash
-pip install sudachidict_full
-pip install sudachidict_small
-pip install sudachidict_core
-```
-
 ## 使用方法
 ### インポートとインスタンスの生成
 ```python
@@ -37,22 +27,22 @@ pip install sudachidict_core
 
 ### 読みの取得
 ```python
-# convert to hiragana
+# ひらがなへの変換
 >>> text = "幽☆遊☆白書は、最高の漫画デス。"
 >>> print(kanji_conv.to_hiragana(text))
 ゆうゆうはくしょ/は/、/さいこう/の/まんが/です/。
 
-# convert to katakana
+# カタカナへの変換
 >>> text = "幽☆遊☆白書は、最高の漫画デス。"
 >>> print(kanji_conv.to_katakana(text))
 ユウユウハクショ/ハ/、/サイコウ/ノ/マンガ/デス/。
 
-# convert to Latin alphabet
+# ローマ字への変換
 >>> text = "幽☆遊☆白書は、最高の漫画デス。"
 >>> print(kanji_conv.to_roman(text))
 yuuyuuhakusho/ha/, /saikou/no/manga/desu/. 
 
-# You can change separator to another character or None
+# 区切り文字を変える、区切り文字無し
 >>> kanji_conv = KanjiConv(separator="_")
 >>> print(kanji_conv.to_hiragana(text))
 ゆうゆうはくしょ_は_、_さいこう_の_まんが_です_。
@@ -60,6 +50,22 @@ yuuyuuhakusho/ha/, /saikou/no/manga/desu/.
 >>> kanji_conv = KanjiConv(separator="")
 >>> print(kanji_conv.to_hiragana(text))
 ゆうゆうはくしょは、さいこうのまんがです。
+```
+
+## （オプション）デフォルト以外のsudachidictのインストール
+辞書のデフォルトはsudachidict_fullです。軽量な辞書を使用したい場合はsudachidict_small、sudachidict_coreのいずれかをインストールできます。
+- 詳細な読みが必要な場合は、sudachidict_fullの使用をお勧めします。デフォルトがsudachidict_fullになっています。
+- 軽量な動作を優先する場合は、sudachidict_smallがお勧めです。
+- sudachidict_coreは、動作速度と精度のバランスを取った選択肢です。
+```bash
+pip install sudachidict_small
+pip install sudachidict_core
+```
+
+- sudachdict_small, sudachidict_coreを使用する場合は指定してください。
+```python
+>>> kanji_conv = KanjiConv(sudachi_dict_type="small", separator="/")
+>>> kanji_conv = KanjiConv(sudachi_dict_type="core", separator="/")
 ```
 
 ## 辞書の更新

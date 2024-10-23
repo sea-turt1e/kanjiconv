@@ -1,23 +1,22 @@
 [tool.poetry]
 name = "kanjiconv"
 version = "0.1.0"
-description = "Kanji Converter to Hiragana, Katakana, Romaji"
+description = "Kanji Converter to Hiragana, Katakana, Roman alphabet"
 authors = ["sea-turt1e <h.yamada.bg@gmail.com>"]
-license = "Apache License Version 2.0"
+repository = "https://github.com/sea-turt1e/kanjiconv"
+license = "Apache-2.0"
 readme = "README.md"
+keywords = ["kanji", "kana", "converter", "sudachi", "propernoun"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
 sudachipy = ">=0.6.8"
-sudachidict-full = "^20240716"
-sudachidict-core = "^20240716"
-
+sudachidict-full = "*"
 
 [tool.poetry.group.dev.dependencies]
 pytest-watch = "^4.2.0"
 pytest-mock = "^3.14.0"
 pytest-cov = "^5.0.0"
-ipdb = "^0.13.13"
 
 [build-system]
 requires = ["poetry-core"]

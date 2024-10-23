@@ -1,5 +1,6 @@
+import importlib
+import importlib.resources
 import json
-import os
 from typing import Callable
 
 import sudachipy
@@ -34,7 +35,6 @@ class KanjiConv:
     def __init__(
         self,
         sudachi_dict_type: SudachiDictType = SudachiDictType.FULL,
-        data_path: str = "kanjiconv/data/kana.json",
         separator: str = " ",
     ) -> None:
         """
@@ -45,10 +45,10 @@ class KanjiConv:
             data_path (str): Path to the JSON file containing kana conversion data.
             separator (str): Separator to use between token readings.
         """
-        assert os.path.isfile(data_path), "File does not exist"
-        with open(data_path, "r") as f:
+        # Load the kana.json file from the package.
+        kana_path = importlib.resources.files("kanjiconv.data").joinpath("kana.json")
+        with kana_path.open("r") as f:
             self.kana = json.load(f)
-            assert isinstance(self.kana, dict), "JSON must be a dictionary"
 
         # Initialize Sudachi tokenizer
         sudachi_dict = sudachipy.Dictionary(dict=sudachi_dict_type.value)
