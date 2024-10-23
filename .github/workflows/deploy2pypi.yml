@@ -1,11 +1,6 @@
 name: Deploy to PyPI
 
 on:
-  pull_request:
-    branches:
-      - deploy
-    types:
-      - closed
   push:
     branches:
       - deploy
