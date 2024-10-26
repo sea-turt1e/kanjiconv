@@ -2,6 +2,8 @@
 English README is here. （英語のREADMEはこちらです。）  
 https://github.com/sea-turt1e/kanjiconv/blob/main/README.md
 
+![kanjiconv](images/kanjiconv.png)
+
 漢字をひらがな、カタカナ、ローマ字に変換するツールです。  
 sudachidictをベースに、日本語の文の読みや発音を取得することができます。  
 sudachidictは定期的に更新される辞書なので、新しい固有名詞等にも比較的対応できます。

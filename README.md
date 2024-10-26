@@ -2,6 +2,8 @@
 Japanese REAMED is here.  （日本語のREADMEはこちらです。）  
 https://github.com/sea-turt1e/kanjiconv/blob/main/README_ja.md
 
+![kanjiconv](images/kanjiconv.png)
+
 Kanji Converter to Hiragana, Katakana, Roman alphabet.  
 You can get the reading and pronunciation of Japanese sentences based on sudachidict.  
 Sudachidict is a regularly updated dictionary, so it can relatively handle new proper nouns and other terms.
