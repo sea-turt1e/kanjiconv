@@ -23,34 +23,34 @@ pip install kanjiconv
 ## 使用方法
 ### インポートとインスタンスの生成
 ```python
->>> from kanjiconv import KanjiConv
->>> kanji_conv = KanjiConv(separator="/")
+from kanjiconv import KanjiConv
+kanji_conv = KanjiConv(separator="/")
 ```
 
 ### 読みの取得
 ```python
 # ひらがなへの変換
->>> text = "幽☆遊☆白書は、最高の漫画デス。"
->>> print(kanji_conv.to_hiragana(text))
+text = "幽☆遊☆白書は、最高の漫画デス。"
+print(kanji_conv.to_hiragana(text))
 ゆうゆうはくしょ/は/、/さいこう/の/まんが/です/。
 
 # カタカナへの変換
->>> text = "幽☆遊☆白書は、最高の漫画デス。"
->>> print(kanji_conv.to_katakana(text))
+text = "幽☆遊☆白書は、最高の漫画デス。"
+print(kanji_conv.to_katakana(text))
 ユウユウハクショ/ハ/、/サイコウ/ノ/マンガ/デス/。
 
 # ローマ字への変換
->>> text = "幽☆遊☆白書は、最高の漫画デス。"
->>> print(kanji_conv.to_roman(text))
+text = "幽☆遊☆白書は、最高の漫画デス。"
+print(kanji_conv.to_roman(text))
 yuuyuuhakusho/ha/, /saikou/no/manga/desu/. 
 
 # 区切り文字を変える、区切り文字無し
->>> kanji_conv = KanjiConv(separator="_")
->>> print(kanji_conv.to_hiragana(text))
+kanji_conv = KanjiConv(separator="_")
+print(kanji_conv.to_hiragana(text))
 ゆうゆうはくしょ_は_、_さいこう_の_まんが_です_。
 
->>> kanji_conv = KanjiConv(separator="")
->>> print(kanji_conv.to_hiragana(text))
+kanji_conv = KanjiConv(separator="")
+print(kanji_conv.to_hiragana(text))
 ゆうゆうはくしょは、さいこうのまんがです。
 ```
 
@@ -66,8 +66,8 @@ pip install sudachidict_core
 
 - sudachdict_small, sudachidict_coreを使用する場合は指定してください。
 ```python
->>> kanji_conv = KanjiConv(sudachi_dict_type="small", separator="/")
->>> kanji_conv = KanjiConv(sudachi_dict_type="core", separator="/")
+kanji_conv = KanjiConv(sudachi_dict_type="small", separator="/")
+kanji_conv = KanjiConv(sudachi_dict_type="core", separator="/")
 ```
 
 ## 辞書の更新
