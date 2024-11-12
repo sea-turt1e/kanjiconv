@@ -47,7 +47,7 @@ class KanjiConv:
         """
         # Load the kana.json file from the package.
         kana_path = importlib.resources.files("kanjiconv.data").joinpath("kana.json")
-        with kana_path.open("r") as f:
+        with kana_path.open("r", encoding="utf-8") as f:
             self.kana = json.load(f)
 
         # Initialize Sudachi tokenizer
