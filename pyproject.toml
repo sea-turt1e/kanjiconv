@@ -6,6 +6,7 @@ authors = ["sea-turt1e <h.yamada.bg@gmail.com>"]
 repository = "https://github.com/sea-turt1e/kanjiconv"
 license = "Apache-2.0"
 readme = "README.md"
+version = "0.1.2"
 keywords = ["kanji", "kana", "converter", "sudachi", "propernoun"]
 
 [tool.poetry.dependencies]

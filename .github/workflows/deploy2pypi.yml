@@ -34,16 +34,30 @@ jobs:
           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}  # PyPIの認証トークン
 
   tag:
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' # 'main'ブランチにマージされた場合
+    needs: deploy
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "export PATH=$HOME/.local/bin:$PATH" >> $GITHUB_ENV
+
       - name: Create Tag
         run: |
-          TAG_NAME=$(date +%Y%m%d%H%M%S)
+          VERSION=$(poetry version -s)
+          TAG_NAME="v$VERSION"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
           git tag $TAG_NAME
           git push origin $TAG_NAME
         env:
