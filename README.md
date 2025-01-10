@@ -1,7 +1,7 @@
 # kanjiconv
 ![Python](https://img.shields.io/badge/-Python-F9DC3E.svg?logo=python&style=flat)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-![PyPI Downloads](https://static.pepy.tech/badge/kanjiconv)
+[![PyPI Downloads](https://static.pepy.tech/badge/kanjiconv)](https://pepy.tech/projects/kanjiconv)
 
 Japanese REAMED is here.  （日本語のREADMEはこちらです。）  
 https://github.com/sea-turt1e/kanjiconv/blob/main/README_ja.md
