@@ -76,5 +76,17 @@ def test_to_roman(mock_dictionary, mock_isfile):
     assert result == "yuuyuuhakusho/ha/, /saikou/no/manga/desu/. "
 
 
+@patch("os.path.isfile", return_value=True)
+@patch("sudachipy.Dictionary")
+def test_with_fugashi(mock_dictionary, mock_isfile):
+    # モックされた辞書を返すように設定
+    mock_tokenizer = mock_dictionary.return_value.create.return_value
+    mock_tokenizer.tokenize.return_value = []
+
+    kanji_conv = KanjiConv(sudachi_dict_type=SudachiDictType.FULL.value, separator="/")
+    result = kanji_conv.to_roman("激を飛ばす")
+    assert result == "yuuyuuhakusho/ha/, /saikou/no/manga/desu/. "
+
+
 if __name__ == "__main__":
     pytest.main()
