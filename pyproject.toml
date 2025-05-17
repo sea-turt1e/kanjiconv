@@ -12,6 +12,8 @@ keywords = ["kanji", "kana", "converter", "sudachi", "propernoun"]
 python = "^3.11"
 sudachipy = ">=0.6.8"
 sudachidict-full = "*"
+unidic = "^1.1.0"
+fugashi = "^1.4.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest-watch = "^4.2.0"
