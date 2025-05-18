@@ -1,6 +1,12 @@
 # kanjiconv
+![Python](https://img.shields.io/badge/-Python-F9DC3E.svg?logo=python&style=flat)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![PyPI Downloads](https://static.pepy.tech/badge/kanjiconv)](https://pepy.tech/projects/kanjiconv)
+
 Japanese REAMED is here.  （日本語のREADMEはこちらです。）  
 https://github.com/sea-turt1e/kanjiconv/blob/main/README_ja.md
+
+![kanjiconv](images/kanjiconv.png)
 
 Kanji Converter to Hiragana, Katakana, Roman alphabet.  
 You can get the reading and pronunciation of Japanese sentences based on sudachidict.  
@@ -18,39 +24,94 @@ python==3.11.7
 pip install kanjiconv
 ```
 
+When you install the package, UniDic dictionary will be downloaded automatically. If the automatic download fails for any reason, you can manually download it by running:
+
+```bash
+python -m unidic download
+```
+
 ## How to use
 ### Import & Create Instance
 ```python
->>> from kanjiconv import KanjiConv
->>> kanji_conv = KanjiConv(separator="/")
+from kanjiconv import KanjiConv
+
+# Basic usage
+kanji_conv = KanjiConv(separator="/")
+
+# Using UniDic for improved kanji reading accuracy
+kanji_conv = KanjiConv(separator="/", use_unidic=True)
+
+# Using custom dictionary for kanji readings not covered by SudachiDict or UniDic
+kanji_conv = KanjiConv(separator="/", use_custom_readings=True)
 ```
 
 ### Get Reading
 ```python
 # convert to hiragana
->>> text = "幽☆遊☆白書は、最高の漫画デス。"
->>> print(kanji_conv.to_hiragana(text))
+text = "幽☆遊☆白書は、最高の漫画デス。"
+print(kanji_conv.to_hiragana(text))
 ゆうゆうはくしょ/は/、/さいこう/の/まんが/です/。
 
 # convert to katakana
->>> text = "幽☆遊☆白書は、最高の漫画デス。"
->>> print(kanji_conv.to_katakana(text))
+text = "幽☆遊☆白書は、最高の漫画デス。"
+print(kanji_conv.to_katakana(text))
 ユウユウハクショ/ハ/、/サイコウ/ノ/マンガ/デス/。
 
 # convert to Roman alphabet
->>> text = "幽☆遊☆白書は、最高の漫画デス。"
->>> print(kanji_conv.to_roman(text))
+text = "幽☆遊☆白書は、最高の漫画デス。"
+print(kanji_conv.to_roman(text))
 yuuyuuhakusho/ha/, /saikou/no/manga/desu/. 
 
 # You can change separator to another character or None
->>> kanji_conv = KanjiConv(separator="_")
->>> print(kanji_conv.to_hiragana(text))
+kanji_conv = KanjiConv(separator="_")
+print(kanji_conv.to_hiragana(text))
 ゆうゆうはくしょ_は_、_さいこう_の_まんが_です_。
 
->>> kanji_conv = KanjiConv(separator="")
->>> print(kanji_conv.to_hiragana(text))
+kanji_conv = KanjiConv(separator="")
+print(kanji_conv.to_hiragana(text))
 ゆうゆうはくしょは、さいこうのまんがです。
 ```
+
+## Using Custom Kanji Reading Dictionary
+KanjiConv supports a custom dictionary for handling special kanji readings that are not properly recognized by SudachiDict or UniDic. This is particularly useful for:
+
+1. Special expressions with unique readings
+2. Technical terms or proper nouns
+3. Ambiguous kanji with multiple readings based on context
+
+The custom dictionary is automatically loaded from the package if available, but you can also define your own:
+
+```python
+from kanjiconv import KanjiConv
+
+# Create instance with custom readings enabled (enabled by default)
+kanji_conv = KanjiConv(separator="/", use_custom_readings=True)
+
+# You can also define your own custom readings
+kanji_conv.custom_readings = {
+    "single": {
+        "激": ["げき"],
+        "飛": ["と", "ひ"]
+    },
+    "compound": {
+        "激を飛ばす": "げきをとばす",
+        "飛ばす": "とばす"
+    }
+}
+
+# Now the special expression will be properly converted
+print(kanji_conv.to_hiragana("激を飛ばす"))
+# Output: げき/を/とばす
+```
+
+### Custom Dictionary Structure
+The custom dictionary uses the following format:
+
+- `single`: A dictionary mapping individual kanji to their reading(s)
+  - Each kanji can have multiple readings as a list
+  - The first reading in the list is used as default
+- `compound`: A dictionary mapping multi-character expressions to their reading
+  - These are processed before tokenization and given priority
 
 ## (Optional) Installing sudachidict other than the default
 The default dictionary is sudachidict_full. If you want to use a lighter dictionary, you can install either sudachidict_small or sudachidict_core.
@@ -63,8 +124,8 @@ pip install sudachidict_core
 ```
 - If using sudachidict_small or sudachidict_core, specify it like this:
 ```python
->>> kanji_conv = KanjiConv(sudachi_dict_type="small", separator="/")
->>> kanji_conv = KanjiConv(sudachi_dict_type="core", separator="/")
+kanji_conv = KanjiConv(sudachi_dict_type="small", separator="/")
+kanji_conv = KanjiConv(sudachi_dict_type="core", separator="/")
 ```
 
 ## Update Dict
