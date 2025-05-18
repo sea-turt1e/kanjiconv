@@ -143,6 +143,8 @@ This project is licensed under the [Apache License 2.0](LICENSE).
 
 - [SudachiPy](https://github.com/WorksApplications/SudachiPy): Apache License 2.0
 - [SudachiDict](https://github.com/WorksApplications/SudachiDict): Apache License 2.0
+- [fugashi](https://github.com/polm/fugashi): MIT License
+- [unidic-py](https://github.com/polm/unidic-py): MIT License
 
 This library uses SudachiPy and its dictionary SudachiDict for morphological analysis. These are also distributed under the Apache License 2.0.
 
@@ -150,3 +152,6 @@ For detailed license information, please refer to the LICENSE files of each proj
 
 - [SudachiPy LICENSE](https://github.com/WorksApplications/SudachiPy/blob/develop/LICENSE)
 - [SudachiDict LICENSE](https://github.com/WorksApplications/SudachiDict/blob/develop/LICENSE-2.0.txt)
+- [fugashi LICENSE](https://github.com/polm/fugashi/blob/main/LICENSE)
+- [unidic-py LICENSE](https://github.com/polm/unidic-py/blob/master/LICENSE)
+```
