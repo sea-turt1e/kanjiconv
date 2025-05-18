@@ -12,7 +12,7 @@ Kanji Converter to Hiragana, Katakana, Roman alphabet.
 You can get the reading and pronunciation of Japanese sentences based on sudachidict.  
 Sudachidict is a regularly updated dictionary, so it can relatively handle new proper nouns and other terms.
 
-## Environments
+## My Environments
 ```
 python>=3.11.7
 ```
