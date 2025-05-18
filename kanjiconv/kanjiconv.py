@@ -5,6 +5,14 @@ from typing import Callable
 
 import sudachipy
 
+try:
+    import fugashi
+    import unidic
+
+    UNIDIC_AVAILABLE = True
+except ImportError:
+    UNIDIC_AVAILABLE = False
+
 from kanjiconv.entities import SudachiDictType
 
 
@@ -20,9 +28,56 @@ def parse_text(func: Callable) -> Callable:
     """
 
     def wrapper(self, text: str):
+        # Try custom compound conversion
+        if hasattr(self, "custom_readings") and self.use_custom_readings:
+            for compound, reading in self.custom_readings.get("compound", {}).items():
+                if compound in text:
+                    text = text.replace(compound, f"[{reading}]")
+
+        # Tokenize using Sudachi and get readings
         tokens = self.tokenizer.tokenize(text)
-        readings = self.separator.join([token.reading_form() for token in tokens])
-        return func(self, readings)
+        readings = []
+
+        # Process each token
+        for token in tokens:
+            # Process custom readings in brackets
+            if token.surface().startswith("[") and token.surface().endswith("]"):
+                readings.append(token.surface()[1:-1])  # Remove brackets
+                continue
+
+            reading = token.reading_form()
+
+            # If reading is not available, use UniDic
+            has_no_reading = not reading or reading == token.surface()
+            if has_no_reading and hasattr(self, "use_unidic") and self.use_unidic and self.unidic_tagger:
+                try:
+                    surface = token.surface()
+                    # Run morphological analysis with UniDic
+                    unidic_nodes = self.unidic_tagger(surface)
+                    if unidic_nodes:
+                        # Extract readings from UniDic
+                        unidic_readings = []
+                        for node in unidic_nodes:
+                            if hasattr(node.feature, "kana") and node.feature.kana:
+                                unidic_readings.append(node.feature.kana)
+                        if unidic_readings:
+                            reading = "".join(unidic_readings)
+                except Exception:
+                    # Ignore errors with UniDic and continue
+                    pass
+
+            # If still no reading is available, use custom dictionary
+            has_no_reading = not reading or reading == token.surface()
+            if has_no_reading and hasattr(self, "custom_readings") and self.use_custom_readings:
+                surface = token.surface()
+                if surface in self.custom_readings.get("single", {}):
+                    reading = self.custom_readings["single"][surface][0]
+
+            readings.append(reading if reading else token.surface())
+
+        # Join with separator
+        joined_readings = self.separator.join(readings)
+        return func(self, joined_readings)
 
     return wrapper
 
@@ -30,30 +85,58 @@ def parse_text(func: Callable) -> Callable:
 class KanjiConv:
     """
     Class for converting Japanese text between different formats such as Hiragana, Katakana, and Roman characters.
+
+    This class uses multiple dictionaries to convert kanji readings:
+    1. SudachiPy: Used as the main dictionary
+    2. UniDic: Used as a fallback when SudachiPy cannot resolve readings (optional)
+    3. Custom dictionary: Used as a fallback when both SudachiPy and UniDic fail
     """
 
     def __init__(
         self,
         sudachi_dict_type: SudachiDictType = SudachiDictType.FULL.value,
         separator: str = " ",
+        use_custom_readings: bool = True,
+        use_unidic: bool = False,
     ) -> None:
         """
         Initializes the KanjiConv instance with a tokenizer and kana conversion data.
 
         Args:
             sudachi_dict_type (SudachiDictType): Type of the Sudachi dictionary to use for tokenization.
-            data_path (str): Path to the JSON file containing kana conversion data.
             separator (str): Separator to use between token readings.
+            use_custom_readings (bool): Whether to use custom readings dictionary as fallback.
+            use_unidic (bool): Whether to use UniDic for additional readings.
         """
         # Load the kana.json file from the package.
         kana_path = importlib.resources.files("kanjiconv.data").joinpath("kana.json")
         with kana_path.open("r", encoding="utf-8") as f:
             self.kana = json.load(f)
 
+        # Load custom kanji readings
+        try:
+            readings_path = importlib.resources.files("kanjiconv.data").joinpath("kanji_readings.json")
+            with readings_path.open("r", encoding="utf-8") as f:
+                self.custom_readings = json.load(f)
+        except (FileNotFoundError, KeyError):
+            self.custom_readings = {"single": {}, "compound": {}}
+
         # Initialize Sudachi tokenizer
         sudachi_dict = sudachipy.Dictionary(dict=sudachi_dict_type)
         self.tokenizer = sudachi_dict.create()
         self.separator = separator
+        self.use_custom_readings = use_custom_readings
+
+        # Initialize UniDic if enabled
+        self.use_unidic = use_unidic and UNIDIC_AVAILABLE
+        self.unidic_tagger = None
+        if self.use_unidic:
+            try:
+                unidic_dict_path = unidic.DICDIR
+                self.unidic_tagger = fugashi.Tagger(unidic_dict_path)
+            except Exception as e:
+                print(f"UniDic initialization failed: {e}")
+                self.use_unidic = False
 
     @parse_text
     def to_hiragana(self, text: str) -> str:
