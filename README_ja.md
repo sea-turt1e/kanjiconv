@@ -95,7 +95,7 @@ kanji_conv.custom_readings = {
     },
     "compound": {
         "激を飛ばす": "げきをとばす",
-        "飛ばす": "とばす"
+        "飛ばす": "とばす",
     }
 }
 

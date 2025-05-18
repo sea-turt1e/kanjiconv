@@ -32,7 +32,7 @@ def parse_text(func: Callable) -> Callable:
         if hasattr(self, "custom_readings") and self.use_custom_readings:
             for compound, reading in self.custom_readings.get("compound", {}).items():
                 if compound in text:
-                    text = text.replace(compound, f"[{reading}]")
+                    text = text.replace(compound, reading)
 
         # Tokenize using Sudachi and get readings
         tokens = self.tokenizer.tokenize(text)
@@ -40,8 +40,8 @@ def parse_text(func: Callable) -> Callable:
 
         # Process each token
         for token in tokens:
-            # Process custom readings in brackets
             if token.surface().startswith("[") and token.surface().endswith("]"):
+                # Process custom readings in brackets
                 readings.append(token.surface()[1:-1])  # Remove brackets
                 continue
 
