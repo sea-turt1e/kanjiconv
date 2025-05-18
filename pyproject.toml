@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "kanjiconv"
-version = "0.2.2"
+version = "0.2.3"
 description = "Kanji Converter to Hiragana, Katakana, Roman alphabet"
 authors = ["sea-turt1e <h.yamada.bg@gmail.com>"]
 repository = "https://github.com/sea-turt1e/kanjiconv"
