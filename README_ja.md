@@ -14,8 +14,7 @@ sudachidictは定期的に更新される辞書なので、新しい固有名詞
 
 ## 環境
 ```
-macOS Sonoma 14.5
-python==3.11.7
+python>=3.11.7
 ```
 
 ## インストール
@@ -24,11 +23,25 @@ python==3.11.7
 pip install kanjiconv
 ```
 
+use_unidicオプションでUniDic辞書を使用する場合、unidic辞書をダウンロードしてください。
+
+```bash
+python -m unidic download
+```
+
 ## 使用方法
 ### インポートとインスタンスの生成
 ```python
 from kanjiconv import KanjiConv
+
+# 基本的な使い方
 kanji_conv = KanjiConv(separator="/")
+
+# UniDicを使用する場合（漢字読みの精度向上）
+kanji_conv = KanjiConv(separator="/", use_unidic=True)
+
+# カスタム辞書を使用する場合（SudachiDictやUniDicでカバーされない漢字の読み）
+kanji_conv = KanjiConv(separator="/", use_custom_readings=True)
 ```
 
 ### 読みの取得
@@ -57,6 +70,47 @@ kanji_conv = KanjiConv(separator="")
 print(kanji_conv.to_hiragana(text))
 ゆうゆうはくしょは、さいこうのまんがです。
 ```
+
+## カスタム漢字読み辞書の使用方法
+KanjiConvは、SudachiDictやUniDicで正しく認識されない特殊な漢字の読みに対応するカスタム辞書をサポートしています。これは以下のような場合に特に有用です：
+
+1. 特殊な表現や独自の読み方
+2. 専門用語や固有名詞
+3. 文脈によって複数の読み方がある曖昧な漢字
+
+カスタム辞書はパッケージから自動的に読み込まれますが、独自の辞書を定義することもできます：
+
+```python
+from kanjiconv import KanjiConv
+
+# カスタム読みを有効にしてインスタンスを作成（デフォルトで有効）
+kanji_conv = KanjiConv(separator="/", use_custom_readings=True)
+
+# 独自のカスタム読みを定義
+kanji_conv.custom_readings = {
+    "single": {
+        "激": ["げき"],
+        "飛": ["と", "ひ"]
+    },
+    "compound": {
+        "激を飛ばす": "げきをとばす",
+        "飛ばす": "とばす",
+    }
+}
+
+# これで特殊表現が正しく変換されます
+print(kanji_conv.to_hiragana("激を飛ばす"))
+# 出力: げき/を/とばす
+```
+
+### カスタム辞書の構造
+カスタム辞書は以下の形式を使用します：
+
+- `single`：個々の漢字とその読み方のマッピング
+  - 各漢字はリストとして複数の読み方を持つことができます
+  - リストの最初の読みがデフォルトとして使用されます
+- `compound`：複数文字の表現とその読み方のマッピング
+  - これらはトークン化前に処理され、優先されます
 
 ## （オプション）デフォルト以外のsudachidictのインストール
 辞書のデフォルトはsudachidict_fullです。軽量な辞書を使用したい場合はsudachidict_small、sudachidict_coreのいずれかをインストールできます。
