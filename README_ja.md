@@ -145,6 +145,8 @@ pip install -U sudachidict_core
 
 - [SudachiPy](https://github.com/WorksApplications/SudachiPy): Apache License 2.0
 - [SudachiDict](https://github.com/WorksApplications/SudachiDict): Apache License 2.0
+- [fugashi](https://github.com/polm/fugashi): MIT License
+- [unidic-py](https://github.com/polm/unidic-py): MIT License
 
 本ライブラリは形態素解析にSudachiPyとその辞書であるSudachiDictを使用しています。これらもApache License 2.0の下で配布されています。
 
@@ -152,3 +154,5 @@ pip install -U sudachidict_core
 
 - [SudachiPyのLICENSE](https://github.com/WorksApplications/SudachiPy/blob/develop/LICENSE)
 - [SudachiDictのLICENSE](https://github.com/WorksApplications/SudachiDict/blob/develop/LICENSE-2.0.txt)
+- [fugashiのLICENSE](https://github.com/polm/fugashi/blob/main/LICENSE)
+- [unidic-pyのLICENSE](https://github.com/polm/unidic-py/blob/master/LICENSE)
