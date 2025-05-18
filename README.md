@@ -14,7 +14,8 @@ Sudachidict is a regularly updated dictionary, so it can relatively handle new p
 
 ## Environments
 ```
-python>=3.11.7
+macOS Sonoma 14.5
+python==3.11.7
 ```
 
 ## Install
@@ -23,7 +24,7 @@ python>=3.11.7
 pip install kanjiconv
 ```
 
-If you want to use the UniDic dictionary with the use_unidic option, please download the unidic dictionary.
+When you install the package, UniDic dictionary will be downloaded automatically. If the automatic download fails for any reason, you can manually download it by running:
 
 ```bash
 python -m unidic download

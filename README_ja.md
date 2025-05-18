@@ -14,7 +14,8 @@ sudachidictは定期的に更新される辞書なので、新しい固有名詞
 
 ## 環境
 ```
-python>=3.11.7
+macOS Sonoma 14.5
+python==3.11.7
 ```
 
 ## インストール
@@ -23,7 +24,7 @@ python>=3.11.7
 pip install kanjiconv
 ```
 
-use_unidicオプションでUniDic辞書を使用する場合、unidic辞書をダウンロードしてください。
+パッケージをインストールすると、UniDic辞書が自動的にダウンロードされます。何らかの理由で自動ダウンロードが失敗した場合は、以下のコマンドで手動でダウンロードできます：
 
 ```bash
 python -m unidic download
