@@ -12,9 +12,6 @@ Kanji Converter to Hiragana, Katakana, Roman alphabet.
 You can get the reading and pronunciation of Japanese sentences based on sudachidict.  
 Sudachidict is a regularly updated dictionary, so it can relatively handle new proper nouns and other terms.
 
-## Local MCP Server
-If you want to use kanjiconv as a local MCP Server, see [kanjicon-mcp](https://github.com/sea-turt1e/kanjiconv_mcp)
-
 ## My Environments
 ```
 python>=3.11.7
@@ -137,6 +134,10 @@ pip install -U sudachidict_full
 pip install -U sudachidict_small
 pip install -U sudachidict_core
 ```
+
+## Local MCP Server
+If you want to use kanjiconv as a local MCP Server, see [kanjicon-mcp](https://github.com/sea-turt1e/kanjiconv_mcp)
+
 
 ## License
 

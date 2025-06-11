@@ -12,9 +12,6 @@ https://github.com/sea-turt1e/kanjiconv/blob/main/README.md
 sudachidictをベースに、日本語の文の読みや発音を取得することができます。  
 sudachidictは定期的に更新される辞書なので、新しい固有名詞等にも比較的対応できます。
 
-## ローカルMCPサーバー
-ローカル環境でkanjiconvをMCPサーバーとして使用したい場合は、[kanjicon-mcp](https://github.com/sea-turt1e/kanjiconv_mcp)を参照してください。  
-
 ## 環境
 ```
 python>=3.11.7
@@ -139,7 +136,9 @@ pip install -U sudachidict_small
 pip install -U sudachidict_core
 ```
 
-## ライセンス
+## ローカルMCPサーバー
+ローカル環境でkanjiconvをMCPサーバーとして使用したい場合は、[kanjicon-mcp](https://github.com/sea-turt1e/kanjiconv_mcp)を参照してください。  
+
 ## ライセンス
 
 本プロジェクトは[Apache License 2.0](LICENSE)の下でライセンスされています。
