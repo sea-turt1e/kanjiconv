@@ -15,8 +15,6 @@ Sudachidict is a regularly updated dictionary, so it can relatively handle new p
 ## Local MCP Server
 If you want to use kanjiconv as a local MCP Server, see [kanjicon-mcp](https://github.com/sea-turt1e/kanjiconv_mcp)
 
-```bash
-
 ## My Environments
 ```
 python>=3.11.7

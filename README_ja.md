@@ -13,7 +13,7 @@ sudachidictをベースに、日本語の文の読みや発音を取得するこ
 sudachidictは定期的に更新される辞書なので、新しい固有名詞等にも比較的対応できます。
 
 ## ローカルMCPサーバー
-ローカル環境でkanjiconvをMCPサーバーとして使用したい場合は、[kanjicon-mcp](https://github.com/sea-turt1e/kanjiconv_mcp)を参照してください。
+ローカル環境でkanjiconvをMCPサーバーとして使用したい場合は、[kanjicon-mcp](https://github.com/sea-turt1e/kanjiconv_mcp)を参照してください。  
 
 ## 環境
 ```
