@@ -14,7 +14,7 @@ Sudachidict is a regularly updated dictionary, so it can relatively handle new p
 
 ## Environment
 ```
-Python >= 3.10
+3.10 <= Python < 3.14
 ```
 
 ## Install

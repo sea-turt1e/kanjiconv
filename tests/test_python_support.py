@@ -12,7 +12,7 @@ except ModuleNotFoundError:  # Python 3.10
     import tomli as tomllib  # type: ignore[no-redef]
 
 
-@pytest.mark.parametrize("version", ["3.10", "3.11", "3.12", "3.13", "3.14"])
+@pytest.mark.parametrize("version", ["3.10", "3.11", "3.12", "3.13"])
 def test_supported_python_versions(version: str) -> None:
     """Ensure the advertised Python version range includes the expected interpreters."""
     pyproject_path = Path(__file__).resolve().parents[1] / "pyproject.toml"
