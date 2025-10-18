@@ -12,16 +12,19 @@ keywords = ["kanji", "kana", "converter", "sudachi", "propernoun"]
 post_install = "kanjiconv.post_install:main"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.10,<3.15"
 sudachipy = ">=0.6.8"
 sudachidict-full = "*"
 unidic = "^1.1.0"
 fugashi = "^1.4.0"
 
 [tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
 pytest-watch = "^4.2.0"
 pytest-mock = "^3.14.0"
 pytest-cov = "^5.0.0"
+packaging = "^24.1"
+tomli = { version = "^2.0.1", python = "<3.11" }
 
 [build-system]
 requires = ["poetry-core"]
