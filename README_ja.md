@@ -14,7 +14,7 @@ sudachidictは定期的に更新される辞書なので、新しい固有名詞
 
 ## 環境
 ```
-python>=3.11.7
+3.10 <= Python <= 3.13
 ```
 
 ## インストール
@@ -136,7 +136,9 @@ pip install -U sudachidict_small
 pip install -U sudachidict_core
 ```
 
-## ライセンス
+## ローカルMCPサーバー
+ローカル環境でkanjiconvをMCPサーバーとして使用したい場合は、[kanjicon-mcp](https://github.com/sea-turt1e/kanjiconv_mcp)を参照してください。  
+
 ## ライセンス
 
 本プロジェクトは[Apache License 2.0](LICENSE)の下でライセンスされています。

@@ -12,9 +12,9 @@ Kanji Converter to Hiragana, Katakana, Roman alphabet.
 You can get the reading and pronunciation of Japanese sentences based on sudachidict.  
 Sudachidict is a regularly updated dictionary, so it can relatively handle new proper nouns and other terms.
 
-## Environments
+## Environment
 ```
-python>=3.11.7
+3.10 <= Python <= 3.13
 ```
 
 ## Install
@@ -135,6 +135,10 @@ pip install -U sudachidict_small
 pip install -U sudachidict_core
 ```
 
+## Local MCP Server
+If you want to use kanjiconv as a local MCP Server, see [kanjicon-mcp](https://github.com/sea-turt1e/kanjiconv_mcp)
+
+
 ## License
 
 This project is licensed under the [Apache License 2.0](LICENSE).
@@ -154,4 +158,3 @@ For detailed license information, please refer to the LICENSE files of each proj
 - [SudachiDict LICENSE](https://github.com/WorksApplications/SudachiDict/blob/develop/LICENSE-2.0.txt)
 - [fugashi LICENSE](https://github.com/polm/fugashi/blob/main/LICENSE)
 - [unidic-py LICENSE](https://github.com/polm/unidic-py/blob/master/LICENSE)
-```
