@@ -1,6 +1,6 @@
 [project]
 name = "kanjiconv"
-version = "0.2.4"
+version = "0.2.5"
 description = "Kanji Converter to Hiragana, Katakana, Roman alphabet"
 readme = "README.md"
 requires-python = ">=3.10,<3.15"
