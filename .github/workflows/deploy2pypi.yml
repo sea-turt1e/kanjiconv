@@ -27,7 +27,7 @@ jobs:
       - name: Publish package to PyPI
         env:
           UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}  # PyPI access token
-        run: uv publish --build
+        run: uv build && uv publish
 
   tag:
     needs: deploy
