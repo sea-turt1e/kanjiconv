@@ -1,10 +1,7 @@
-﻿#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 from __future__ import annotations
-
 import argparse
-import sys
 from importlib.metadata import PackageNotFoundError, version
 
 from .kanjiconv import KanjiConv
@@ -82,3 +79,4 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+)

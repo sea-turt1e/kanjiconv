@@ -1,5 +1,4 @@
-﻿#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 import io
 import sys
@@ -49,3 +48,4 @@ def test_main_uses_hiragana_mode(mock_kanji_conv):
     assert result == 0
     assert stdout.getvalue() == "ゆうゆうはくしょは、さいこうのまんがです。"
     mock_instance.to_hiragana.assert_called_once_with("幽☆遊☆白書は、最高の漫画ﾃﾞｽ。")
+)
