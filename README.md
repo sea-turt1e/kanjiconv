@@ -30,6 +30,64 @@ python -m unidic download
 ```
 
 ## How to use
+
+### CLI usage
+After installing kanjiconv, you can use the `kanjiconv` command from your terminal.
+
+```bash
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。"
+```
+
+By default, the CLI converts text to roman alphabet and inserts a single space between token readings.
+
+```text
+yuuyuuhakusho ha ,  saikou no manga desu .
+```
+
+Use `-m`/`--mode` to choose the output format:
+
+```bash
+# Convert to hiragana
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode hiragana
+
+# Convert to katakana
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode katakana
+
+# Convert to roman alphabet (which is already the default)
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode roman
+```
+
+Use `-s`/`--separator` to change the separator inserted between token readings:
+
+```bash
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode hiragana --separator "/"
+# ゆうゆうはくしょ/は/、/さいこう/の/まんが/です/。
+
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode hiragana --separator ""
+# ゆうゆうはくしょは、さいこうのまんがです。
+```
+
+Additional options:
+
+```bash
+# Use UniDic as a fallback for readings when available
+kanjiconv "東京に行く" --mode hiragana --use-unidic
+
+# Disable the custom reading fallback
+kanjiconv "激を飛ばす" --mode hiragana --no-custom-readings
+```
+
+## CLI flags/options
+
+| Option                                   | Description                                                            |
+| ---------------------------------------- | ---------------------------------------------------------------------- |
+| `-m`/`--mode {roman,hiragana,katakana}`  | Conversion mode. Defaults to `roman`.                                  |
+| `-s`/`--separator SEPARATOR`             | Separator inserted between token readings. Defaults to a single space. |
+| `--use-unidic`                           | Use UniDic as a fallback for readings when available.                  |
+| `--no-custom-readings`                   | Disable custom reading fallback.                                       |
+| `--version`                              | Show the installed version.                                            |
+| `-h`/`--help`                            | Show help.                                                             |
+
 ### Import & Create Instance
 ```python
 from kanjiconv import KanjiConv
