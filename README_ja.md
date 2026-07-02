@@ -30,6 +30,64 @@ python -m unidic download
 ```
 
 ## 使用方法
+
+### CLIの使用方法
+kanjiconvをインストールすると、ターミナルから `kanjiconv` コマンドを使用できます。
+
+```bash
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。"
+```
+
+デフォルトでは、CLIはテキストをローマ字に変換し、各トークンの読みの間に半角スペースを1つ挿入します。
+
+```text
+yuuyuuhakusho ha ,  saikou no manga desu .
+```
+
+`-m`/`--mode` で出力形式を選択できます:
+
+```bash
+# ひらがなに変換
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode hiragana
+
+# カタカナに変換
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode katakana
+
+# ローマ字に変換（デフォルトと同じ）
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode roman
+```
+
+`-s`/`--separator` でトークンの読みの間に挿入する区切り文字を変更できます:
+
+```bash
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode hiragana --separator "/"
+# ゆうゆうはくしょ/は/、/さいこう/の/まんが/です/。
+
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode hiragana --separator ""
+# ゆうゆうはくしょは、さいこうのまんがです。
+```
+
+その他のオプション:
+
+```bash
+# 読みが取得できない場合にUniDicをフォールバックとして使用
+kanjiconv "東京に行く" --mode hiragana --use-unidic
+
+# カスタム読みのフォールバックを無効化
+kanjiconv "激を飛ばす" --mode hiragana --no-custom-readings
+```
+
+## CLIのフラグ/オプション
+
+| オプション                                | 説明                                                                    |
+| ---------------------------------------- | ---------------------------------------------------------------------- |
+| `-m`/`--mode {roman,hiragana,katakana}`  | 変換モード。デフォルトは `roman`。                                        |
+| `-s`/`--separator SEPARATOR`             | トークンの読みの間に挿入する区切り文字。デフォルトは半角スペース1つ。         |
+| `--use-unidic`                           | 利用可能な場合、読みのフォールバックとしてUniDicを使用する。                 |
+| `--no-custom-readings`                   | カスタム読みのフォールバックを無効化する。                                  |
+| `--version`                              | インストールされているバージョンを表示する。                                |
+| `-h`/`--help`                            | ヘルプを表示する。                                                       |
+
 ### インポートとインスタンスの生成
 ```python
 from kanjiconv import KanjiConv
