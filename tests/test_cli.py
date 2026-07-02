@@ -27,7 +27,7 @@ def test_main_uses_to_roman(mock_kanji_conv):
         result = main(["幽☆遊☆白書は、最高の漫画ﾃﾞｽ。"])
 
     assert result == 0
-    assert stdout.getvalue() == "yuuyuuhakusho ha, saikou no manga desu."
+    assert stdout.getvalue() == "yuuyuuhakusho ha, saikou no manga desu.\n"
     mock_kanji_conv.assert_called_once_with(
         separator=" ",
         use_custom_readings=True,
@@ -46,6 +46,5 @@ def test_main_uses_hiragana_mode(mock_kanji_conv):
         result = main(["幽☆遊☆白書は、最高の漫画ﾃﾞｽ。", "-m", "hiragana"])
 
     assert result == 0
-    assert stdout.getvalue() == "ゆうゆうはくしょは、さいこうのまんがです。"
+    assert stdout.getvalue() == "ゆうゆうはくしょは、さいこうのまんがです。\n"
     mock_instance.to_hiragana.assert_called_once_with("幽☆遊☆白書は、最高の漫画ﾃﾞｽ。")
-)
