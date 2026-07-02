@@ -32,6 +32,7 @@ Issues = "https://github.com/sea-turt1e/kanjiconv/issues"
 
 [project.scripts]
 post_install = "kanjiconv.post_install:main"
+kanjiconv = "kanjiconv.cli:main"
 
 [tool.uv]
 default-groups = ["dev"]
@@ -58,6 +59,7 @@ keywords = ["kanji", "kana", "converter", "sudachi", "propernoun"]
 
 [tool.poetry.scripts]
 post_install = "kanjiconv.post_install:main"
+kanjiconv = "kanjiconv.cli:main"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.15"
