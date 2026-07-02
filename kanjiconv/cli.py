@@ -73,7 +73,7 @@ def main(argv: list[str] | None = None) -> int:
     else:
         result = converter.to_roman(text)
 
-    print(result, end="")
+    print(result)
     return 0
 
 
