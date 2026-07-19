@@ -23,11 +23,16 @@ Sudachidict is a regularly updated dictionary, so it can relatively handle new p
 pip install kanjiconv
 ```
 
-If you want to use the UniDic dictionary with the use_unidic option, please download the unidic dictionary.
+`fugashi`/`unidic` are not installed by default. If you want to use the UniDic dictionary
+with the `use_unidic` option, install the optional extra and download the dictionary:
 
 ```bash
+pip install "kanjiconv[unidic]"
 python -m unidic download
 ```
+
+Passing `use_unidic=True` (or `--use-unidic` on the CLI) without this extra installed
+raises `ImportError` with the install instructions above.
 
 ## How to use
 
@@ -83,8 +88,9 @@ kanjiconv "激を飛ばす" --mode hiragana --no-custom-readings
 | ---------------------------------------- | ---------------------------------------------------------------------- |
 | `-m`/`--mode {roman,hiragana,katakana}`  | Conversion mode. Defaults to `roman`.                                  |
 | `-s`/`--separator SEPARATOR`             | Separator inserted between token readings. Defaults to a single space. |
-| `--use-unidic`                           | Use UniDic as a fallback for readings when available.                  |
+| `--use-unidic`                           | Use UniDic as a fallback for readings when available (requires the `kanjiconv[unidic]` extra). |
 | `--no-custom-readings`                   | Disable custom reading fallback.                                       |
+| `--split-mode {A,B,C}`                   | Sudachi split granularity. Defaults to `C` (longest units).            |
 | `--version`                              | Show the installed version.                                            |
 | `-h`/`--help`                            | Show help.                                                             |
 
@@ -96,6 +102,8 @@ from kanjiconv import KanjiConv
 kanji_conv = KanjiConv(separator="/")
 
 # Using UniDic for improved kanji reading accuracy
+# (requires `pip install "kanjiconv[unidic]"` and `python -m unidic download`,
+# otherwise raises ImportError)
 kanji_conv = KanjiConv(separator="/", use_unidic=True)
 
 # Using custom dictionary for kanji readings not covered by SudachiDict or UniDic
