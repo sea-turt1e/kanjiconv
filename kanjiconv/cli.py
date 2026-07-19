@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 import argparse
+import sys
 from importlib.metadata import PackageNotFoundError, version
 
 from .kanjiconv import KanjiConv
@@ -48,6 +49,12 @@ def create_parser() -> argparse.ArgumentParser:
         help="Disable custom reading fallback.",
     )
     parser.add_argument(
+        "--split-mode",
+        choices=["A", "B", "C"],
+        default="C",
+        help="Sudachi split granularity. Default is C (longest units).",
+    )
+    parser.add_argument(
         "--version",
         action="version",
         version=get_version(),
@@ -60,11 +67,16 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     text = " ".join(args.text)
 
-    converter = KanjiConv(
-        separator=args.separator,
-        use_custom_readings=not args.no_custom_readings,
-        use_unidic=args.use_unidic,
-    )
+    try:
+        converter = KanjiConv(
+            separator=args.separator,
+            use_custom_readings=not args.no_custom_readings,
+            use_unidic=args.use_unidic,
+            sudachi_split_mode=args.split_mode,
+        )
+    except ImportError as e:
+        print(str(e), file=sys.stderr)
+        return 1
 
     if args.mode == "hiragana":
         result = converter.to_hiragana(text)

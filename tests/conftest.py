@@ -8,6 +8,8 @@ from __future__ import annotations
 import sys
 import types
 
+import pytest
+
 
 def _install_stub(module_name: str, stub: types.ModuleType) -> None:
     """Register a stub module if the real dependency is not installed."""
@@ -31,6 +33,7 @@ class _StubSudachiDictionary:  # pragma: no cover - simple holder
 
 
 _sudachipy_stub.Dictionary = _StubSudachiDictionary
+_sudachipy_stub.SplitMode = types.SimpleNamespace(A="A", B="B", C="C")
 _install_stub("sudachipy", _sudachipy_stub)
 
 
@@ -55,3 +58,13 @@ _install_stub("fugashi", _fugashi_stub)
 _unidic_stub = types.ModuleType("unidic")
 _unidic_stub.DICDIR = "/usr/share/unidic"
 _install_stub("unidic", _unidic_stub)
+
+
+@pytest.fixture(autouse=True)
+def _clear_kanjiconv_caches():
+    """Clear module-level caches so per-test mocks/patches don't leak across tests."""
+    from kanjiconv import kanjiconv as kanjiconv_module
+
+    kanjiconv_module._get_tokenizer.cache_clear()
+    yield
+    kanjiconv_module._get_tokenizer.cache_clear()

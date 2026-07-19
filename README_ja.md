@@ -23,13 +23,77 @@ sudachidictは定期的に更新される辞書なので、新しい固有名詞
 pip install kanjiconv
 ```
 
-use_unidicオプションでUniDic辞書を使用する場合、unidic辞書をダウンロードしてください。
+`fugashi`/`unidic` はデフォルトではインストールされません。`use_unidic`オプションでUniDic辞書を使用する場合は、
+optional extraをインストールした上で辞書をダウンロードしてください。
 
 ```bash
+pip install "kanjiconv[unidic]"
 python -m unidic download
 ```
 
+このextraをインストールせずに`use_unidic=True`(CLIでは`--use-unidic`)を指定すると、
+上記のインストール手順を含む`ImportError`が発生します。
+
 ## 使用方法
+
+### CLIの使用方法
+kanjiconvをインストールすると、ターミナルから `kanjiconv` コマンドを使用できます。
+
+```bash
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。"
+```
+
+デフォルトでは、CLIはテキストをローマ字に変換し、各トークンの読みの間に半角スペースを1つ挿入します。
+
+```text
+yuuyuuhakusho ha ,  saikou no manga desu .
+```
+
+`-m`/`--mode` で出力形式を選択できます:
+
+```bash
+# ひらがなに変換
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode hiragana
+
+# カタカナに変換
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode katakana
+
+# ローマ字に変換（デフォルトと同じ）
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode roman
+```
+
+`-s`/`--separator` でトークンの読みの間に挿入する区切り文字を変更できます:
+
+```bash
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode hiragana --separator "/"
+# ゆうゆうはくしょ/は/、/さいこう/の/まんが/です/。
+
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode hiragana --separator ""
+# ゆうゆうはくしょは、さいこうのまんがです。
+```
+
+その他のオプション:
+
+```bash
+# 読みが取得できない場合にUniDicをフォールバックとして使用
+kanjiconv "東京に行く" --mode hiragana --use-unidic
+
+# カスタム読みのフォールバックを無効化
+kanjiconv "激を飛ばす" --mode hiragana --no-custom-readings
+```
+
+## CLIのフラグ/オプション
+
+| オプション                                | 説明                                                                    |
+| ---------------------------------------- | ---------------------------------------------------------------------- |
+| `-m`/`--mode {roman,hiragana,katakana}`  | 変換モード。デフォルトは `roman`。                                        |
+| `-s`/`--separator SEPARATOR`             | トークンの読みの間に挿入する区切り文字。デフォルトは半角スペース1つ。         |
+| `--use-unidic`                           | 利用可能な場合、読みのフォールバックとしてUniDicを使用する（`kanjiconv[unidic]` extraが必要）。 |
+| `--no-custom-readings`                   | カスタム読みのフォールバックを無効化する。                                  |
+| `--split-mode {A,B,C}`                   | Sudachiの分割単位。デフォルトは`C`（最長単位）。                            |
+| `--version`                              | インストールされているバージョンを表示する。                                |
+| `-h`/`--help`                            | ヘルプを表示する。                                                       |
+
 ### インポートとインスタンスの生成
 ```python
 from kanjiconv import KanjiConv
@@ -38,6 +102,8 @@ from kanjiconv import KanjiConv
 kanji_conv = KanjiConv(separator="/")
 
 # UniDicを使用する場合（漢字読みの精度向上）
+# （`pip install "kanjiconv[unidic]"` と `python -m unidic download` が必要。
+#  未インストールの場合はImportErrorが発生する）
 kanji_conv = KanjiConv(separator="/", use_unidic=True)
 
 # カスタム辞書を使用する場合（SudachiDictやUniDicでカバーされない漢字の読み）

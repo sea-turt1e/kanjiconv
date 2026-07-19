@@ -287,23 +287,17 @@ wheels = [
 
 [[package]]
 name = "kanjiconv"
-version = "0.2.6"
+version = "0.3.0"
 source = { editable = "." }
 dependencies = [
-    { name = "fugashi" },
     { name = "sudachidict-full" },
     { name = "sudachipy" },
-    { name = "unidic" },
 ]
 
 [package.optional-dependencies]
-dev = [
-    { name = "packaging" },
-    { name = "pytest" },
-    { name = "pytest-cov" },
-    { name = "pytest-mock" },
-    { name = "pytest-watch" },
-    { name = "tomli", marker = "python_full_version < '3.11'" },
+unidic = [
+    { name = "fugashi" },
+    { name = "unidic" },
 ]
 
 [package.dev-dependencies]
@@ -318,18 +312,12 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "fugashi", specifier = ">=1.4.0,<2.0.0" },
-    { name = "packaging", marker = "extra == 'dev'", specifier = ">=24.1,<25.0" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.3,<9.0.0" },
-    { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5.0.0,<6.0.0" },
-    { name = "pytest-mock", marker = "extra == 'dev'", specifier = ">=3.13.0,<4.0.0" },
-    { name = "pytest-watch", marker = "extra == 'dev'", specifier = ">=4.2.0,<5.0.0" },
+    { name = "fugashi", marker = "extra == 'unidic'", specifier = ">=1.4.0,<2.0.0" },
     { name = "sudachidict-full" },
     { name = "sudachipy", specifier = ">=0.6.8" },
-    { name = "tomli", marker = "python_full_version < '3.11' and extra == 'dev'", specifier = ">=2.0.1,<3.0.0" },
-    { name = "unidic", specifier = ">=1.1.0,<2.0.0" },
+    { name = "unidic", marker = "extra == 'unidic'", specifier = ">=1.1.0,<2.0.0" },
 ]
-provides-extras = ["dev"]
+provides-extras = ["unidic"]
 
 [package.metadata.requires-dev]
 dev = [
