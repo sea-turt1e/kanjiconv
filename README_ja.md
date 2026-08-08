@@ -3,8 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![PyPI Downloads](https://static.pepy.tech/badge/kanjiconv)](https://pepy.tech/projects/kanjiconv)
 
-English README is here. （英語のREADMEはこちらです。）  
-https://github.com/sea-turt1e/kanjiconv/blob/main/README.md
+[EN](https://github.com/sea-turt1e/kanjiconv/blob/main/README.md) | **JA**
 
 ![kanjiconv](images/kanjiconv.png)
 
@@ -14,8 +13,7 @@ sudachidictは定期的に更新される辞書なので、新しい固有名詞
 
 ## 環境
 ```
-macOS Sonoma 14.5
-python==3.11.7
+3.10 <= Python <= 3.13
 ```
 
 ## インストール
@@ -24,13 +22,77 @@ python==3.11.7
 pip install kanjiconv
 ```
 
-パッケージをインストールすると、UniDic辞書が自動的にダウンロードされます。何らかの理由で自動ダウンロードが失敗した場合は、以下のコマンドで手動でダウンロードできます：
+`fugashi`/`unidic` はデフォルトではインストールされません。`use_unidic`オプションでUniDic辞書を使用する場合は、
+optional extraをインストールした上で辞書をダウンロードしてください。
 
 ```bash
+pip install "kanjiconv[unidic]"
 python -m unidic download
 ```
 
+このextraをインストールせずに`use_unidic=True`(CLIでは`--use-unidic`)を指定すると、
+上記のインストール手順を含む`ImportError`が発生します。
+
 ## 使用方法
+
+### CLIの使用方法
+kanjiconvをインストールすると、ターミナルから `kanjiconv` コマンドを使用できます。
+
+```bash
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。"
+```
+
+デフォルトでは、CLIはテキストをローマ字に変換し、各トークンの読みの間に半角スペースを1つ挿入します。
+
+```text
+yuuyuuhakusho ha ,  saikou no manga desu .
+```
+
+`-m`/`--mode` で出力形式を選択できます:
+
+```bash
+# ひらがなに変換
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode hiragana
+
+# カタカナに変換
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode katakana
+
+# ローマ字に変換（デフォルトと同じ）
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode roman
+```
+
+`-s`/`--separator` でトークンの読みの間に挿入する区切り文字を変更できます:
+
+```bash
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode hiragana --separator "/"
+# ゆうゆうはくしょ/は/、/さいこう/の/まんが/です/。
+
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode hiragana --separator ""
+# ゆうゆうはくしょは、さいこうのまんがです。
+```
+
+その他のオプション:
+
+```bash
+# 読みが取得できない場合にUniDicをフォールバックとして使用
+kanjiconv "東京に行く" --mode hiragana --use-unidic
+
+# カスタム読みのフォールバックを無効化
+kanjiconv "激を飛ばす" --mode hiragana --no-custom-readings
+```
+
+## CLIのフラグ/オプション
+
+| オプション                                | 説明                                                                    |
+| ---------------------------------------- | ---------------------------------------------------------------------- |
+| `-m`/`--mode {roman,hiragana,katakana}`  | 変換モード。デフォルトは `roman`。                                        |
+| `-s`/`--separator SEPARATOR`             | トークンの読みの間に挿入する区切り文字。デフォルトは半角スペース1つ。         |
+| `--use-unidic`                           | 利用可能な場合、読みのフォールバックとしてUniDicを使用する（`kanjiconv[unidic]` extraが必要）。 |
+| `--no-custom-readings`                   | カスタム読みのフォールバックを無効化する。                                  |
+| `--split-mode {A,B,C}`                   | Sudachiの分割単位。デフォルトは`C`（最長単位）。                            |
+| `--version`                              | インストールされているバージョンを表示する。                                |
+| `-h`/`--help`                            | ヘルプを表示する。                                                       |
+
 ### インポートとインスタンスの生成
 ```python
 from kanjiconv import KanjiConv
@@ -39,6 +101,8 @@ from kanjiconv import KanjiConv
 kanji_conv = KanjiConv(separator="/")
 
 # UniDicを使用する場合（漢字読みの精度向上）
+# （`pip install "kanjiconv[unidic]"` と `python -m unidic download` が必要。
+#  未インストールの場合はImportErrorが発生する）
 kanji_conv = KanjiConv(separator="/", use_unidic=True)
 
 # カスタム辞書を使用する場合（SudachiDictやUniDicでカバーされない漢字の読み）
@@ -137,7 +201,9 @@ pip install -U sudachidict_small
 pip install -U sudachidict_core
 ```
 
-## ライセンス
+## ローカルMCPサーバー
+ローカル環境でkanjiconvをMCPサーバーとして使用したい場合は、[kanjicon-mcp](https://github.com/sea-turt1e/kanjiconv_mcp)を参照してください。  
+
 ## ライセンス
 
 本プロジェクトは[Apache License 2.0](LICENSE)の下でライセンスされています。
@@ -146,6 +212,8 @@ pip install -U sudachidict_core
 
 - [SudachiPy](https://github.com/WorksApplications/SudachiPy): Apache License 2.0
 - [SudachiDict](https://github.com/WorksApplications/SudachiDict): Apache License 2.0
+- [fugashi](https://github.com/polm/fugashi): MIT License
+- [unidic-py](https://github.com/polm/unidic-py): MIT License
 
 本ライブラリは形態素解析にSudachiPyとその辞書であるSudachiDictを使用しています。これらもApache License 2.0の下で配布されています。
 
@@ -153,3 +221,5 @@ pip install -U sudachidict_core
 
 - [SudachiPyのLICENSE](https://github.com/WorksApplications/SudachiPy/blob/develop/LICENSE)
 - [SudachiDictのLICENSE](https://github.com/WorksApplications/SudachiDict/blob/develop/LICENSE-2.0.txt)
+- [fugashiのLICENSE](https://github.com/polm/fugashi/blob/main/LICENSE)
+- [unidic-pyのLICENSE](https://github.com/polm/unidic-py/blob/master/LICENSE)

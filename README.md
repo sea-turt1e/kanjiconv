@@ -3,8 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![PyPI Downloads](https://static.pepy.tech/badge/kanjiconv)](https://pepy.tech/projects/kanjiconv)
 
-Japanese REAMED is here.  （日本語のREADMEはこちらです。）  
-https://github.com/sea-turt1e/kanjiconv/blob/main/README_ja.md
+**EN** | [JA](https://github.com/sea-turt1e/kanjiconv/blob/main/README_ja.md)
 
 ![kanjiconv](images/kanjiconv.png)
 
@@ -12,10 +11,9 @@ Kanji Converter to Hiragana, Katakana, Roman alphabet.
 You can get the reading and pronunciation of Japanese sentences based on sudachidict.  
 Sudachidict is a regularly updated dictionary, so it can relatively handle new proper nouns and other terms.
 
-## Environments
+## Environment
 ```
-macOS Sonoma 14.5
-python==3.11.7
+3.10 <= Python <= 3.13
 ```
 
 ## Install
@@ -24,13 +22,77 @@ python==3.11.7
 pip install kanjiconv
 ```
 
-When you install the package, UniDic dictionary will be downloaded automatically. If the automatic download fails for any reason, you can manually download it by running:
+`fugashi`/`unidic` are not installed by default. If you want to use the UniDic dictionary
+with the `use_unidic` option, install the optional extra and download the dictionary:
 
 ```bash
+pip install "kanjiconv[unidic]"
 python -m unidic download
 ```
 
+Passing `use_unidic=True` (or `--use-unidic` on the CLI) without this extra installed
+raises `ImportError` with the install instructions above.
+
 ## How to use
+
+### CLI usage
+After installing kanjiconv, you can use the `kanjiconv` command from your terminal.
+
+```bash
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。"
+```
+
+By default, the CLI converts text to roman alphabet and inserts a single space between token readings.
+
+```text
+yuuyuuhakusho ha ,  saikou no manga desu .
+```
+
+Use `-m`/`--mode` to choose the output format:
+
+```bash
+# Convert to hiragana
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode hiragana
+
+# Convert to katakana
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode katakana
+
+# Convert to roman alphabet (which is already the default)
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode roman
+```
+
+Use `-s`/`--separator` to change the separator inserted between token readings:
+
+```bash
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode hiragana --separator "/"
+# ゆうゆうはくしょ/は/、/さいこう/の/まんが/です/。
+
+kanjiconv "幽☆遊☆白書は、最高の漫画デス。" --mode hiragana --separator ""
+# ゆうゆうはくしょは、さいこうのまんがです。
+```
+
+Additional options:
+
+```bash
+# Use UniDic as a fallback for readings when available
+kanjiconv "東京に行く" --mode hiragana --use-unidic
+
+# Disable the custom reading fallback
+kanjiconv "激を飛ばす" --mode hiragana --no-custom-readings
+```
+
+## CLI flags/options
+
+| Option                                   | Description                                                            |
+| ---------------------------------------- | ---------------------------------------------------------------------- |
+| `-m`/`--mode {roman,hiragana,katakana}`  | Conversion mode. Defaults to `roman`.                                  |
+| `-s`/`--separator SEPARATOR`             | Separator inserted between token readings. Defaults to a single space. |
+| `--use-unidic`                           | Use UniDic as a fallback for readings when available (requires the `kanjiconv[unidic]` extra). |
+| `--no-custom-readings`                   | Disable custom reading fallback.                                       |
+| `--split-mode {A,B,C}`                   | Sudachi split granularity. Defaults to `C` (longest units).            |
+| `--version`                              | Show the installed version.                                            |
+| `-h`/`--help`                            | Show help.                                                             |
+
 ### Import & Create Instance
 ```python
 from kanjiconv import KanjiConv
@@ -39,6 +101,8 @@ from kanjiconv import KanjiConv
 kanji_conv = KanjiConv(separator="/")
 
 # Using UniDic for improved kanji reading accuracy
+# (requires `pip install "kanjiconv[unidic]"` and `python -m unidic download`,
+# otherwise raises ImportError)
 kanji_conv = KanjiConv(separator="/", use_unidic=True)
 
 # Using custom dictionary for kanji readings not covered by SudachiDict or UniDic
@@ -136,6 +200,10 @@ pip install -U sudachidict_small
 pip install -U sudachidict_core
 ```
 
+## Local MCP Server
+If you want to use kanjiconv as a local MCP Server, see [kanjicon-mcp](https://github.com/sea-turt1e/kanjiconv_mcp)
+
+
 ## License
 
 This project is licensed under the [Apache License 2.0](LICENSE).
@@ -144,6 +212,8 @@ This project is licensed under the [Apache License 2.0](LICENSE).
 
 - [SudachiPy](https://github.com/WorksApplications/SudachiPy): Apache License 2.0
 - [SudachiDict](https://github.com/WorksApplications/SudachiDict): Apache License 2.0
+- [fugashi](https://github.com/polm/fugashi): MIT License
+- [unidic-py](https://github.com/polm/unidic-py): MIT License
 
 This library uses SudachiPy and its dictionary SudachiDict for morphological analysis. These are also distributed under the Apache License 2.0.
 
@@ -151,3 +221,5 @@ For detailed license information, please refer to the LICENSE files of each proj
 
 - [SudachiPy LICENSE](https://github.com/WorksApplications/SudachiPy/blob/develop/LICENSE)
 - [SudachiDict LICENSE](https://github.com/WorksApplications/SudachiDict/blob/develop/LICENSE-2.0.txt)
+- [fugashi LICENSE](https://github.com/polm/fugashi/blob/main/LICENSE)
+- [unidic-py LICENSE](https://github.com/polm/unidic-py/blob/master/LICENSE)
