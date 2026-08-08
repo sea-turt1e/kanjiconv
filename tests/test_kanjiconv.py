@@ -161,5 +161,37 @@ def test_with_unidic(mock_unidic_find, mock_fugashi_tagger, mock_dictionary, moc
     assert result == "geki"
 
 
+@patch("kanjiconv.kanjiconv.UNIDIC_AVAILABLE", False)
+def test_use_unidic_without_extra_raises_import_error():
+    """use_unidic=True without the optional unidic extra installed should fail loudly."""
+    with pytest.raises(ImportError, match=r"kanjiconv\[unidic\]"):
+        KanjiConv(use_unidic=True)
+
+
+@patch("os.path.isfile", return_value=True)
+@patch("sudachipy.Dictionary")
+def test_tokenizer_is_shared_across_instances_with_same_dict_type(mock_dictionary, mock_isfile):
+    """The Sudachi tokenizer should be created once per dict type, not per instance."""
+    mock_dictionary.return_value.create.return_value.tokenize.return_value = []
+
+    first = KanjiConv(sudachi_dict_type=SudachiDictType.FULL.value)
+    second = KanjiConv(sudachi_dict_type=SudachiDictType.FULL.value)
+
+    assert first.tokenizer is second.tokenizer
+    mock_dictionary.assert_called_once_with(dict=SudachiDictType.FULL.value)
+
+
+@patch("os.path.isfile", return_value=True)
+@patch("sudachipy.Dictionary")
+def test_custom_readings_are_not_shared_across_instances(mock_dictionary, mock_isfile):
+    """Mutating one instance's custom_readings must not affect another instance."""
+    first = KanjiConv(sudachi_dict_type=SudachiDictType.FULL.value)
+    second = KanjiConv(sudachi_dict_type=SudachiDictType.FULL.value)
+
+    first.custom_readings["single"]["__not_a_real_kanji__"] = ["テスト"]
+
+    assert "__not_a_real_kanji__" not in second.custom_readings["single"]
+
+
 if __name__ == "__main__":
     pytest.main()

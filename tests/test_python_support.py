@@ -19,5 +19,5 @@ def test_supported_python_versions(version: str) -> None:
     with pyproject_path.open("rb") as fh:
         payload = tomllib.load(fh)
 
-    spec = SpecifierSet(payload["tool"]["poetry"]["dependencies"]["python"])
+    spec = SpecifierSet(payload["project"]["requires-python"])
     assert Version(version) in spec, f"Python {version} is not included in the supported range"

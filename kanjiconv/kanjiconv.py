@@ -1,6 +1,8 @@
 import importlib
 import importlib.resources
 import json
+import logging
+from functools import lru_cache
 from typing import Callable
 
 import sudachipy
@@ -14,6 +16,44 @@ except ImportError:
     UNIDIC_AVAILABLE = False
 
 from kanjiconv.entities import SudachiDictType
+
+__all__ = ["KanjiConv"]
+
+logger = logging.getLogger(__name__)
+
+_UNIDIC_EXTRA_HINT = (
+    'use_unidic=True requires the optional "unidic" extra. Install it with: '
+    'pip install "kanjiconv[unidic]", then run: python -m unidic download'
+)
+
+_SPLIT_MODES = {
+    "A": sudachipy.SplitMode.A,
+    "B": sudachipy.SplitMode.B,
+    "C": sudachipy.SplitMode.C,
+}
+
+
+@lru_cache(maxsize=None)
+def _load_kana() -> dict:
+    kana_path = importlib.resources.files("kanjiconv.data").joinpath("kana.json")
+    with kana_path.open("r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+@lru_cache(maxsize=None)
+def _load_custom_readings() -> tuple:
+    try:
+        readings_path = importlib.resources.files("kanjiconv.data").joinpath("kanji_readings.json")
+        with readings_path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (FileNotFoundError, KeyError):
+        data = {"single": {}, "compound": {}}
+    return (data.get("single", {}), data.get("compound", {}))
+
+
+@lru_cache(maxsize=None)
+def _get_tokenizer(dict_type: str):
+    return sudachipy.Dictionary(dict=dict_type).create()
 
 
 def parse_text(func: Callable) -> Callable:
@@ -29,51 +69,46 @@ def parse_text(func: Callable) -> Callable:
 
     def wrapper(self, text: str):
         # Try custom compound conversion
-        if hasattr(self, "custom_readings") and self.use_custom_readings:
+        if self.use_custom_readings:
             for compound, reading in self.custom_readings.get("compound", {}).items():
-                if compound in text:
-                    text = text.replace(compound, reading)
+                text = text.replace(compound, reading)
 
         # Tokenize using Sudachi and get readings
-        tokens = self.tokenizer.tokenize(text)
+        tokens = self.tokenizer.tokenize(text, self._sudachi_split_mode)
         readings = []
 
         # Process each token
         for token in tokens:
-            if token.surface().startswith("[") and token.surface().endswith("]"):
+            surface = token.surface()
+
+            if surface.startswith("[") and surface.endswith("]"):
                 # Process custom readings in brackets
-                readings.append(token.surface()[1:-1])  # Remove brackets
+                readings.append(surface[1:-1])  # Remove brackets
                 continue
 
             reading = token.reading_form()
+            has_no_reading = not reading or reading == surface
 
             # If reading is not available, use UniDic
-            has_no_reading = not reading or reading == token.surface()
-            if has_no_reading and hasattr(self, "use_unidic") and self.use_unidic and self.unidic_tagger:
+            if has_no_reading and self.use_unidic and self.unidic_tagger:
                 try:
-                    surface = token.surface()
                     # Run morphological analysis with UniDic
                     unidic_nodes = self.unidic_tagger(surface)
-                    if unidic_nodes:
-                        # Extract readings from UniDic
-                        unidic_readings = []
-                        for node in unidic_nodes:
-                            if hasattr(node.feature, "kana") and node.feature.kana:
-                                unidic_readings.append(node.feature.kana)
-                        if unidic_readings:
-                            reading = "".join(unidic_readings)
+                    unidic_readings = [
+                        node.feature.kana for node in unidic_nodes if getattr(node.feature, "kana", None)
+                    ]
+                    if unidic_readings:
+                        reading = "".join(unidic_readings)
+                        has_no_reading = False
                 except Exception:
                     # Ignore errors with UniDic and continue
-                    pass
+                    logger.debug("UniDic lookup failed for %r", surface, exc_info=True)
 
             # If still no reading is available, use custom dictionary
-            has_no_reading = not reading or reading == token.surface()
-            if has_no_reading and hasattr(self, "custom_readings") and self.use_custom_readings:
-                surface = token.surface()
-                if surface in self.custom_readings.get("single", {}):
-                    reading = self.custom_readings["single"][surface][0]
+            if has_no_reading and self.use_custom_readings and surface in self.custom_readings.get("single", {}):
+                reading = self.custom_readings["single"][surface][0]
 
-            readings.append(reading if reading else token.surface())
+            readings.append(reading if reading else surface)
 
         # Join with separator
         joined_readings = self.separator.join(readings)
@@ -98,6 +133,7 @@ class KanjiConv:
         separator: str = " ",
         use_custom_readings: bool = True,
         use_unidic: bool = False,
+        sudachi_split_mode: str = "C",
     ) -> None:
         """
         Initializes the KanjiConv instance with a tokenizer and kana conversion data.
@@ -106,37 +142,44 @@ class KanjiConv:
             sudachi_dict_type (SudachiDictType): Type of the Sudachi dictionary to use for tokenization.
             separator (str): Separator to use between token readings.
             use_custom_readings (bool): Whether to use custom readings dictionary as fallback.
-            use_unidic (bool): Whether to use UniDic for additional readings.
+            use_unidic (bool): Whether to use UniDic for additional readings. Requires the
+                optional "unidic" extra (``pip install "kanjiconv[unidic]"``).
+            sudachi_split_mode (str): Sudachi split granularity, one of "A", "B", "C" (default "C").
         """
-        # Load the kana.json file from the package.
-        kana_path = importlib.resources.files("kanjiconv.data").joinpath("kana.json")
-        with kana_path.open("r", encoding="utf-8") as f:
-            self.kana = json.load(f)
+        self.kana = _load_kana()
 
-        # Load custom kanji readings
+        # Load custom kanji readings (copy so per-instance mutation doesn't leak via the cache).
+        single, compound = _load_custom_readings()
+        self.custom_readings = {"single": dict(single), "compound": dict(compound)}
+
+        # Sudachi tokenizer is created lazily and shared across instances with the same dict type.
+        self._sudachi_dict_type = sudachi_dict_type
         try:
-            readings_path = importlib.resources.files("kanjiconv.data").joinpath("kanji_readings.json")
-            with readings_path.open("r", encoding="utf-8") as f:
-                self.custom_readings = json.load(f)
-        except (FileNotFoundError, KeyError):
-            self.custom_readings = {"single": {}, "compound": {}}
+            self._sudachi_split_mode = _SPLIT_MODES[sudachi_split_mode]
+        except KeyError:
+            raise ValueError(
+                f"Invalid sudachi_split_mode: {sudachi_split_mode!r}. Must be one of 'A', 'B', 'C'."
+            ) from None
 
-        # Initialize Sudachi tokenizer
-        sudachi_dict = sudachipy.Dictionary(dict=sudachi_dict_type)
-        self.tokenizer = sudachi_dict.create()
         self.separator = separator
         self.use_custom_readings = use_custom_readings
 
         # Initialize UniDic if enabled
-        self.use_unidic = use_unidic and UNIDIC_AVAILABLE
+        if use_unidic and not UNIDIC_AVAILABLE:
+            raise ImportError(_UNIDIC_EXTRA_HINT)
+        self.use_unidic = use_unidic
         self.unidic_tagger = None
         if self.use_unidic:
             try:
                 unidic_dict_path = unidic.DICDIR
                 self.unidic_tagger = fugashi.Tagger(unidic_dict_path)
-            except Exception as e:
-                print(f"UniDic initialization failed: {e}")
+            except (RuntimeError, OSError) as e:
+                logger.warning("UniDic initialization failed: %s", e)
                 self.use_unidic = False
+
+    @property
+    def tokenizer(self):
+        return _get_tokenizer(self._sudachi_dict_type)
 
     @parse_text
     def to_hiragana(self, text: str) -> str:
