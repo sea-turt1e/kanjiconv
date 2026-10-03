@@ -42,6 +42,13 @@ After installing kanjiconv, you can use the `kanjiconv` command from your termin
 kanjiconv "幽☆遊☆白書は、最高の漫画デス。"
 ```
 
+Text can also be piped to the command when no positional text is provided:
+
+```bash
+echo "幽☆遊☆白書は、最高の漫画デス。" | kanjiconv --mode hiragana --separator ""
+# ゆうゆうはくしょは、さいこうのまんがです。
+```
+
 By default, the CLI converts text to roman alphabet and inserts a single space between token readings.
 
 ```text
