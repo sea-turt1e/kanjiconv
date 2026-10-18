@@ -22,8 +22,8 @@ def create_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "text",
-        nargs="+",
-        help="The Japanese sentence to convert.",
+        nargs="*",
+        help="The Japanese sentence to convert. Reads from stdin when omitted.",
     )
     parser.add_argument(
         "-m",
@@ -65,7 +65,12 @@ def create_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     parser = create_parser()
     args = parser.parse_args(argv)
-    text = " ".join(args.text)
+    if args.text:
+        text = " ".join(args.text)
+    elif not sys.stdin.isatty():
+        text = sys.stdin.read().rstrip("\r\n")
+    else:
+        parser.error("provide text as an argument or pipe it through stdin")
 
     try:
         converter = KanjiConv(
