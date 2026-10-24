@@ -52,6 +52,38 @@ def test_main_uses_hiragana_mode(mock_kanji_conv):
 
 
 @patch("kanjiconv.cli.KanjiConv")
+def test_main_reads_text_from_stdin_when_no_positional_text(mock_kanji_conv):
+    mock_instance = mock_kanji_conv.return_value
+    mock_instance.to_roman.return_value = "nihongo"
+
+    stdout = io.StringIO()
+    with patch.object(sys, "stdin", io.StringIO("日本語\n")), patch.object(
+        sys, "stdout", stdout
+    ):
+        result = main([])
+
+    assert result == 0
+    assert stdout.getvalue() == "nihongo\n"
+    mock_instance.to_roman.assert_called_once_with("日本語")
+
+
+@patch("kanjiconv.cli.KanjiConv")
+def test_main_rejects_missing_text_when_stdin_is_a_terminal(mock_kanji_conv):
+    stdin = io.StringIO()
+    stdin.isatty = lambda: True
+
+    with patch.object(sys, "stdin", stdin):
+        try:
+            main([])
+        except SystemExit as error:
+            assert error.code == 2
+        else:
+            raise AssertionError("expected argparse to reject missing input")
+
+    mock_kanji_conv.assert_not_called()
+
+
+@patch("kanjiconv.cli.KanjiConv")
 def test_main_use_unidic_without_extra_exits_with_hint(mock_kanji_conv):
     mock_kanji_conv.side_effect = ImportError(
         'use_unidic=True requires the optional "unidic" extra. Install it with: '

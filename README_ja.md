@@ -13,7 +13,28 @@ sudachidictは定期的に更新される辞書なので、新しい固有名詞
 
 ## 環境
 ```
-3.10 <= Python <= 3.13
+3.10 <= Python <= 3.15
+```
+
+### セキュリティ注意: eMudhra CA 証明書の侵害
+eMudhra（emSign）の中間CA証明書 8 件の秘密鍵が漏洩しました（[アドバイザリ](https://emudhra.we-have-a-problem.com/)）。
+古い Python は、同梱の pip/certifi を通じてこれらの証明書を信頼しています。
+`pip install` や `python -m unidic download` などの HTTPS 通信が影響を受けます。
+
+- Python を **3.15.1** / **3.14.9** / **3.13.17**、または同じ系列のそれ以降のバージョンに更新してください。
+- 既存の環境（仮想環境を含む）では pip と certifi も更新してください:
+  ```bash
+  pip install -U "pip>=26.2.2" "certifi>=2026.10.19"
+  ```
+- Python 3.10〜3.12 には修正版がありません。上記の pip / certifi の更新が必須です。
+
+kanjiconv は import 時に、実行中の Python がその系列の修正版より古い場合 `InsecurePythonWarning` を出します。
+pip / certifi を更新済みで警告を消したい場合は、`KANJICONV_SUPPRESS_PYTHON_WARNING=1` を設定するか、警告をフィルタしてください:
+
+```python
+import warnings
+from kanjiconv import InsecurePythonWarning
+warnings.filterwarnings("ignore", category=InsecurePythonWarning)
 ```
 
 ## インストール

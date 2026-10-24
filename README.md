@@ -13,7 +13,30 @@ Sudachidict is a regularly updated dictionary, so it can relatively handle new p
 
 ## Environment
 ```
-3.10 <= Python <= 3.13
+3.10 <= Python <= 3.15
+```
+
+### Security notice: eMudhra CA certificate compromise
+The private keys of eight eMudhra (emSign) intermediate CA certificates have been
+compromised ([advisory](https://emudhra.we-have-a-problem.com/)). Older Python
+installations trust these certificates through their bundled pip/certifi.
+This affects HTTPS downloads such as `pip install` and `python -m unidic download`.
+
+- Upgrade Python to **3.15.1**, **3.14.9**, **3.13.17**, or a later release in the same series.
+- In existing environments (including virtualenvs), update pip and certifi:
+  ```bash
+  pip install -U "pip>=26.2.2" "certifi>=2026.10.19"
+  ```
+- Python 3.10 to 3.12 have no patched release. Updating pip and certifi as shown above is required.
+
+When imported, kanjiconv emits an `InsecurePythonWarning` if the running Python
+is older than the patched release of its series. To silence it after updating
+pip/certifi, set `KANJICONV_SUPPRESS_PYTHON_WARNING=1` or filter the warning:
+
+```python
+import warnings
+from kanjiconv import InsecurePythonWarning
+warnings.filterwarnings("ignore", category=InsecurePythonWarning)
 ```
 
 ## Install
@@ -40,6 +63,13 @@ After installing kanjiconv, you can use the `kanjiconv` command from your termin
 
 ```bash
 kanjiconv "幽☆遊☆白書は、最高の漫画デス。"
+```
+
+Text can also be piped to the command when no positional text is provided:
+
+```bash
+echo "幽☆遊☆白書は、最高の漫画デス。" | kanjiconv --mode hiragana --separator ""
+# ゆうゆうはくしょは、さいこうのまんがです。
 ```
 
 By default, the CLI converts text to roman alphabet and inserts a single space between token readings.
