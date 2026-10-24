@@ -291,7 +291,7 @@ wheels = [
 
 [[package]]
 name = "kanjiconv"
-version = "0.3.1"
+version = "0.4.0"
 source = { editable = "." }
 dependencies = [
     { name = "sudachidict-full", version = "20250825", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.15'" },
